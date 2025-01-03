@@ -77,7 +77,7 @@ use egui::{
     Align2, Area, Context, Direction, Frame, Id, Order, Pos2, Response, Rounding, Shape, Stroke, Ui,
 };
 
-pub type ToastContents = dyn Fn(&mut Ui, &mut Toast) -> Response + Send + Sync;
+pub type ToastContents = dyn Fn(&mut Ui, &mut Toast) -> Option<Response> + Send + Sync;
 
 pub struct Toasts {
     id: Id,
@@ -148,7 +148,7 @@ impl Toasts {
     pub fn custom_contents(
         mut self,
         kind: impl Into<ToastKind>,
-        add_contents: impl Fn(&mut Ui, &mut Toast) -> Response + Send + Sync + 'static,
+        add_contents: impl Fn(&mut Ui, &mut Toast) -> Option<Response> + Send + Sync + 'static,
     ) -> Self {
         self.custom_toast_contents
             .insert(kind.into(), Arc::new(add_contents));
@@ -288,7 +288,7 @@ impl Toasts {
     }
 }
 
-fn default_toast_contents(ui: &mut Ui, toast: &mut Toast) -> Response {
+fn default_toast_contents(ui: &mut Ui, toast: &mut Toast) -> Option<Response> {
     let inner_margin = 10.0;
     let frame = Frame::window(ui.style());
     let response = frame
@@ -340,7 +340,7 @@ fn default_toast_contents(ui: &mut Ui, toast: &mut Toast) -> Response {
     ));
     ui.painter().add(frame_shape);
 
-    response
+    Some(response)
 }
 
 fn progress_bar(ui: &mut Ui, response: &Response, toast: &Toast) {

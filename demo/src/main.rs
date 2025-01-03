@@ -198,24 +198,26 @@ impl Demo {
     }
 }
 
-fn my_custom_toast_contents(ui: &mut egui::Ui, toast: &mut Toast) -> egui::Response {
-    Frame::default()
-        .fill(Color32::from_rgb(33, 150, 243))
-        .inner_margin(Margin::same(12.0))
-        .rounding(4.0)
-        .show(ui, |ui| {
-            ui.label(toast.text.clone().color(Color32::WHITE).monospace());
+fn my_custom_toast_contents(ui: &mut egui::Ui, toast: &mut Toast) -> Option<egui::Response> {
+    Some(
+        Frame::default()
+            .fill(Color32::from_rgb(33, 150, 243))
+            .inner_margin(Margin::same(12.0))
+            .rounding(4.0)
+            .show(ui, |ui| {
+                ui.label(toast.text.clone().color(Color32::WHITE).monospace());
 
-            if egui::Button::new(RichText::new("Close").color(Color32::WHITE))
-                .fill(Color32::from_rgb(33, 150, 243))
-                .stroke((1.0, Color32::WHITE))
-                .ui(ui)
-                .clicked()
-            {
-                toast.close();
-            }
-        })
-        .response
+                if egui::Button::new(RichText::new("Close").color(Color32::WHITE))
+                    .fill(Color32::from_rgb(33, 150, 243))
+                    .stroke((1.0, Color32::WHITE))
+                    .ui(ui)
+                    .clicked()
+                {
+                    toast.close();
+                }
+            })
+            .response,
+    )
 }
 
 fn alignment_selection(ui: &mut egui::Ui, current_value: &mut Align2, alignment: Align2) {
