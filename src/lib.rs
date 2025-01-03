@@ -187,9 +187,14 @@ impl Toasts {
                         add_contents(ui, toast)
                     } else {
                         default_toast_contents(ui, toast)
-                    };
-                })
-                .response;
+                    }
+                });
+
+            if response.inner.is_none() {
+                toast.close();
+            }
+
+            let response = response.response;
 
             if !response.hovered() {
                 toast.options.ttl_sec -= dt;
@@ -251,9 +256,14 @@ impl Toasts {
                         add_contents(ui, toast)
                     } else {
                         default_toast_contents(ui, toast)
-                    };
-                })
-                .response;
+                    }
+                });
+
+            if response.inner.is_none() {
+                toast.close();
+            }
+
+            let response = response.response;
 
             if !response.hovered() {
                 toast.options.ttl_sec -= dt;
